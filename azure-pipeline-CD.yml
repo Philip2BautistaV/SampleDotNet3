@@ -49,7 +49,7 @@ stages:
   # ---------------------------------------------------------------
   - stage: DeployDev
     displayName: 'Deploy to Dev'
-    condition: eq(resources.pipeline.lgwebappCI.sourceBranch, 'refs/heads/develop')
+    condition: eq(variables['resources.pipeline.lgwebappCI.sourceBranch'], 'refs/heads/develop')
     jobs:
       - deployment: DeployToDev
         displayName: 'Deploy LGWebApp to Dev'
@@ -87,7 +87,7 @@ stages:
   - stage: DeployTest
     displayName: 'Deploy to Test/UAT'
     dependsOn: []   # not dependent on Dev -- release/* skips straight here
-    condition: startsWith(resources.pipeline.lgwebappCI.sourceBranch, 'refs/heads/release/')
+    condition: eq(variables['resources.pipeline.lgwebappCI.sourceBranch'], 'refs/heads/release')
     jobs:
       - deployment: DeployToTest
         displayName: 'Deploy LGWebApp to Test/UAT'
@@ -125,7 +125,7 @@ stages:
   - stage: DeployProd
     displayName: 'Deploy to Production'
     dependsOn: []   # main is deployed independently of Dev/Test stage runs
-    condition: eq(resources.pipeline.lgwebappCI.sourceBranch, 'refs/heads/main')
+    condition: eq(variables['resources.pipeline.lgwebappCI.sourceBranch'], 'refs/heads/main')
     jobs:
       - deployment: DeployToProd
         displayName: 'Deploy LGWebApp to Prod'
