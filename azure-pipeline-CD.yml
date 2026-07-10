@@ -38,7 +38,7 @@ components:
   dataplatform:
     enabled: false                    # Set to true when DB/Fabric changes are in scope
     pipelineName: "DataPlatform-CI"
-    branch: "refs/heads/main"
+    branch: "refs/heads/release/*"
     artifactName: "dataplatform-drop"
 
   aiml:
@@ -51,7 +51,7 @@ components:
   webapp:
     enabled: false                     # WebApp is in scope for Release 1
     pipelineName: "WebApp-CI"
-    branch: "refs/heads/main"
+    branch: "refs/heads/develop"
     artifactName: "webapp-drop"
     note: "WebApp always deploys last — it is the consumer of all upstream components"
 
@@ -90,22 +90,22 @@ resources:
   repositories:
     - repository: coordinator
       type: git
-      name: MyProject/release-coordinator
+      name: DBG-ACN/release-coordinator
       ref: refs/heads/main
 
   pipelines:
     - pipeline: webapp-ci
-      project: MyProject
+      project: DBG-ACN
       source: "WebApp-CI"
-      branch: main
+      branch: develop
 
     - pipeline: dataplatform-ci
-      project: MyProject
+      project: DBG-ACN
       source: "DataPlatform-CI"
-      branch: main
+      branch: release/*
 
     - pipeline: aiml-ci
-      project: MyProject
+      project: DBG-ACN
       source: "AIML-CI"
       branch: main
 
@@ -182,7 +182,7 @@ stages:
                     project: MyProject
                     definition: $(resources.pipeline.dataplatform-ci.pipelineID)
                     buildVersionToDownload: latestFromBranch
-                    branchName: refs/heads/main
+                    branchName: refs/heads/release/*
                     artifactName: dataplatform-drop
                     targetPath: $(Pipeline.Workspace)/dataplatform
 
@@ -271,7 +271,7 @@ stages:
                     project: MyProject
                     definition: $(resources.pipeline.webapp-ci.pipelineID)
                     buildVersionToDownload: latestFromBranch
-                    branchName: refs/heads/main
+                    branchName: refs/heads/develop
                     artifactName: webapp-drop
                     targetPath: $(Pipeline.Workspace)/webapp
 
